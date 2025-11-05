@@ -2,7 +2,6 @@ pipeline {
   agent any
 
   stages {
-
     stage('Install Dependencies') {
       steps {
         sh '''
@@ -17,17 +16,31 @@ pipeline {
       steps {
         sh '''
           . venv/bin/activate
-          python3 -m coverage run -m pytest
-          python3 -m coverage xml -o coverage.xml
+          pytest --junitxml=test-results.xml
+          coverage run -m pytest
+          coverage xml -o coverage.xml
+          coverage html
         '''
       }
     }
 
-    stage('Publish Coverage Report') {
+    stage('Publish Test Report') {
       steps {
-        publishCoverage adapters: [coberturaAdapter('coverage.xml')]
+        junit 'test-results.xml'
       }
     }
 
+    stage('Publish Coverage HTML') {
+      steps {
+        publishHTML (target: [
+          reportDir: 'htmlcov',
+          reportFiles: 'index.html',
+          reportName: 'Coverage Report',
+          keepAll: true,
+          alwaysLinkToLastBuild: true,
+          allowMissing: false
+        ])
+      }
+    }
   }
 }
