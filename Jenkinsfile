@@ -25,7 +25,7 @@ pipeline {
 
     stage('Publish Coverage Report') {
       steps {
-        recordCoverage tools: [python(pattern: 'coverage.xml')]
+        recordCoverage tools: [cobertura(pattern: 'coverage.xml')]
       }
     }
 
