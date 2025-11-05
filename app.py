@@ -10,3 +10,7 @@ def subtract(a, b):
 def multiple(a, b):
     return a * b
 
+# Divide function
+def divide(a, b):
+    return round(float(a/b), 2)
+

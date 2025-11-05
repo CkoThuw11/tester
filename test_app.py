@@ -1,4 +1,4 @@
-from app import add, subtract, multiple
+from app import add, subtract, multiple, divide
 
 def test_add():
     assert add(2, 3) == 5
@@ -8,3 +8,6 @@ def test_substract():
 
 def test_multiple():
     assert multiple(4, 5) == 20
+
+def test_divide():
+    assert divide(2, 1) == 2
