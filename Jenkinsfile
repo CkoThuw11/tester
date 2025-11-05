@@ -24,7 +24,7 @@ pipeline {
 
     stage('Publish Coverage Report') {
       steps {
-        cobertura coberturaReportFile: 'coverage.xml'
+        recordCoverage tools: [cobertura(pattern: 'coverage.xml')]
       }
     }
   }
