@@ -12,12 +12,19 @@ pipeline {
       }
     }
 
-    stage('Run Tests') {
+    stage('Run Tests with Coverage') {
       steps {
         sh '''
           . venv/bin/activate
-          pytest
+          coverage run -m pytest
+          coverage xml -o coverage.xml
         '''
+      }
+    }
+
+    stage('Publish Coverage Report') {
+      steps {
+        cobertura coberturaReportFile: 'coverage.xml'
       }
     }
   }
