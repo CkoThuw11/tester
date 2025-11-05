@@ -12,33 +12,28 @@ pipeline {
       }
     }
 
-    stage('Run Tests with Coverage') {
+    stage('Run Tests + Coverage') {
       steps {
         sh '''
           . venv/bin/activate
           pytest --junitxml=test-results.xml
-          coverage run -m pytest
-          coverage xml -o coverage.xml
           coverage html
         '''
       }
     }
 
-    stage('Publish Test Report') {
+    stage('Publish Reports') {
       steps {
+        // Publish JUnit
         junit 'test-results.xml'
-      }
-    }
 
-    stage('Publish Coverage HTML') {
-      steps {
-        publishHTML (target: [
-          reportDir: 'htmlcov',
-          reportFiles: 'index.html',
-          reportName: 'Coverage Report',
-          keepAll: true,
-          alwaysLinkToLastBuild: true,
-          allowMissing: false
+        // Publish HTML coverage
+        publishHTML(target: [
+            reportDir: 'htmlcov',
+            reportFiles: 'index.html',
+            reportName: 'HTML Coverage Report',
+            alwaysLinkToLastBuild: true,
+            keepAll: true
         ])
       }
     }
