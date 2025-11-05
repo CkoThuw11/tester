@@ -1,23 +1,24 @@
 pipeline {
-    agent any
+  agent any
 
-    stages {
-        stage ('Install Dependencies') {
-            steps {
-                sh 'pip3 install -r requirements.txt'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                sh 'pytest --junitxml=results.xml'
-            }
-        }
-
-        stage('Publish Results') {
-            steps {
-                junit 'result.xml'
-            }
-        }
+  stages {
+    stage('Install Dependencies') {
+      steps {
+        sh '''
+          python3 -m venv venv
+          . venv/bin/activate
+          pip install -r requirements.txt
+        '''
+      }
     }
+
+    stage('Run Tests') {
+      steps {
+        sh '''
+          . venv/bin/activate
+          pytest
+        '''
+      }
+    }
+  }
 }
