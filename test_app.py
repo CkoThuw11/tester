@@ -1,4 +1,4 @@
-from app import add, subtract, multiple, divide
+from utils.app import add, subtract, multiple, divide
 
 def test_add():
     assert add(2, 3) == 5
