@@ -16,26 +16,32 @@ pipeline {
       steps {
         sh '''
           . venv/bin/activate
-          pytest --junitxml=test-results.xml
-          coverage html
+          # Run pytest with coverage enabled
+          pytest --junitxml=test-results.xml --cov=. --cov-report=xml --cov-report=html
         '''
       }
     }
 
     stage('Publish Reports') {
       steps {
-        // Publish JUnit
+        // Publish JUnit results
         junit 'test-results.xml'
 
-        // Publish HTML coverage
+        // Publish HTML coverage report
         publishHTML(target: [
-            reportDir: 'htmlcov',
-            reportFiles: 'index.html',
-            reportName: 'HTML Coverage Report',
-            alwaysLinkToLastBuild: true,
-            keepAll: true
+          reportDir: 'htmlcov',
+          reportFiles: 'index.html',
+          reportName: 'HTML Coverage Report',
+          alwaysLinkToLastBuild: true,
+          keepAll: true
         ])
       }
+    }
+  }
+
+  post {
+    always {
+      echo "Build completed. Reports are available in Jenkins UI."
     }
   }
 }
